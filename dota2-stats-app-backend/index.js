@@ -2,19 +2,22 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const TelegramBot = require('node-telegram-bot-api');
+const fetch = require('node-fetch'); // добавим для запросов с backend
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const TELEGRAM_BOT_TOKEN = process.env.BOT_TOKEN; // замени на свой токен
-const bot = new TelegramBot(TELEGRAM_BOT_TOKEN, { polling: false });
+const TELEGRAM_BOT_TOKEN = process.env.BOT_TOKEN;
+const FRONTEND_URL = process.env.FRONTEND_URL || 'https://dota2-stats-app.vercel.app'; // URL твоего WebApp
+
+const bot = new TelegramBot(TELEGRAM_BOT_TOKEN, { polling: true }); // включаем polling
 
 app.use(bodyParser.json());
 
 // временное хранилище
 const userAccountIds = {};
 
-// сохранить accountId
+// API endpoint для сохранения accountId
 app.post('/saveAccountId', (req, res) => {
   const { telegramId, accountId } = req.body;
   if (!telegramId || !accountId) {
@@ -25,7 +28,7 @@ app.post('/saveAccountId', (req, res) => {
   res.json({ success: true });
 });
 
-// получить accountId
+// API endpoint для получения accountId
 app.get('/getAccountId', (req, res) => {
   const telegramId = req.query.telegramId;
   if (!telegramId) {
@@ -38,7 +41,7 @@ app.get('/getAccountId', (req, res) => {
   res.json({ accountId });
 });
 
-// отправить сообщение пользователю
+// API endpoint для отправки сообщений
 app.post('/sendMessage', async (req, res) => {
   const { telegramId, message } = req.body;
   if (!telegramId || !message) {
@@ -53,7 +56,40 @@ app.post('/sendMessage', async (req, res) => {
   }
 });
 
-// старт сервера
+// 🟢 Обработка текстовых сообщений от пользователя
+bot.on('message', async (msg) => {
+  const telegramId = msg.from.id;
+  const text = msg.text?.trim();
+
+  if (/^\d+$/.test(text)) { // если текст — это число (Dota ID)
+    const accountId = text;
+    try {
+      // сохраняем через backend API (локально сохраняется, но показываю как POST)
+      await fetch(`http://localhost:${PORT}/saveAccountId`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ telegramId, accountId }),
+      });
+
+      // отправляем кнопку для запуска WebApp
+      await bot.sendMessage(telegramId, '✅ Твой Dota ID сохранён! Нажми кнопку ниже, чтобы открыть статистику:', {
+        reply_markup: {
+          inline_keyboard: [[
+            { text: 'Открыть статистику', web_app: { url: FRONTEND_URL } }
+          ]]
+        }
+      });
+    } catch (err) {
+      console.error('Ошибка сохранения ID:', err);
+      await bot.sendMessage(telegramId, '❌ Произошла ошибка при сохранении ID.');
+    }
+  } else {
+    // если сообщение не ID
+    await bot.sendMessage(telegramId, 'Пожалуйста, отправь свой Dota ID числом (например, 123456789).');
+  }
+});
+
+// запуск сервера
 app.listen(PORT, () => {
   console.log(`🚀 Backend server running on port ${PORT}`);
 });
