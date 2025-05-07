@@ -100,6 +100,7 @@ function AppContent() {
       tg.expand();
 
       const telegramId = tg.initDataUnsafe?.user?.id;
+      console.log("🟢 telegramId на фронтенде:", telegramId);
       if (telegramId) {
         fetch(
           `https://dota2-stats-app-backend.onrender.com/getAccountId?telegramId=${telegramId}`

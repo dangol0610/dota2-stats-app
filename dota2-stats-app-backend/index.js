@@ -47,6 +47,7 @@ app.post("/saveAccountId", (req, res) => {
 // API endpoint для получения accountId
 app.get("/getAccountId", (req, res) => {
   const telegramId = req.query.telegramId;
+  console.log('▶️ Запрос accountId для telegramId:', telegramId);
   if (!telegramId) {
     return res.status(400).json({ error: "Missing telegramId" });
   }
