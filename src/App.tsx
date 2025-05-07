@@ -90,21 +90,64 @@ function Header({ onSearch }: { onSearch: (id: string) => void }) {
 }
 
 function AppContent() {
+  const [accountId, setAccountId] = useState<number | null>(null);
+  const navigate = useNavigate();
+
   useEffect(() => {
     const tg = window.Telegram?.WebApp;
     if (tg) {
-      tg.ready(); // сообщает Telegram, что WebApp загружен
-      tg.expand(); // раскрывает WebApp на всю высоту
+      tg.ready();
+      tg.expand();
+
+      const telegramId = tg.initDataUnsafe?.user?.id;
+      if (telegramId) {
+        fetch(
+          `https://dota2-stats-app-backend.onrender.com/getAccountId?telegramId=${telegramId}`
+        )
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.accountId) {
+              console.log("✅ Привязанный accountId найден:", data.accountId);
+              setAccountId(Number(data.accountId));
+            } else {
+              console.log("❌ Привязки нет, используется дефолтный.");
+              setAccountId(153709817); // или можно null, чтобы показать форму поиска
+            }
+          })
+          .catch((err) => {
+            console.error("Ошибка запроса:", err);
+            setAccountId(153709817); // fallback
+          });
+      } else {
+        console.log("❌ Telegram ID не найден → fallback");
+        setAccountId(153709817);
+      }
+    } else {
+      console.log("❌ WebApp API не найден → fallback");
+      setAccountId(153709817);
     }
   }, []);
-  const [accountId, setAccountId] = useState<number>(153709817);
-  const navigate = useNavigate();
 
   const handleSearch = (id: string) => {
     const numId = parseInt(id);
     if (!isNaN(numId)) {
       setAccountId(numId);
       navigate("/");
+
+      // при вводе нового ID → можно также отправить его на backend для обновления
+      const telegramId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id;
+      if (telegramId) {
+        fetch("https://dota2-stats-app-backend.onrender.com/saveAccountId", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ telegramId, accountId: numId }),
+        })
+          .then((res) => res.json())
+          .then((data) => console.log("✅ accountId сохранён:", data))
+          .catch((err) =>
+            console.error("❌ Ошибка сохранения accountId:", err)
+          );
+      }
     }
   };
 
@@ -112,7 +155,7 @@ function AppContent() {
     <>
       <Header onSearch={handleSearch} />
       <div className="w-full mx-auto p-4 text-white">
-        {accountId && (
+        {accountId !== null && (
           <>
             <PlayerProfile accountId={accountId} />
             <div className="mt-6" />
@@ -128,6 +171,11 @@ function AppContent() {
               />
             </Routes>
           </>
+        )}
+        {accountId === null && (
+          <div className="text-center text-yellow-400 text-lg mt-8">
+            Загрузка данных профиля...
+          </div>
         )}
       </div>
     </>
