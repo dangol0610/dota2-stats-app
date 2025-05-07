@@ -62,6 +62,12 @@ app.post('/sendMessage', async (req, res) => {
   }
 });
 
+// Обработка команды /start
+bot.onText(/\/start/, (msg) => {
+    const telegramId = msg.from.id;
+    bot.sendMessage(telegramId, '👋 Привет! Пожалуйста, отправь мне свой Dota ID числом, чтобы я мог привязать твой аккаунт.');
+  });
+
 // 🟢 Обработка текстовых сообщений от пользователя
 bot.on('message', async (msg) => {
   const telegramId = msg.from.id;
