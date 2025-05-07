@@ -5,6 +5,7 @@ const TelegramBot = require("node-telegram-bot-api");
 const fetch = require("node-fetch").default; // добавим для запросов с backend
 const fs = require("fs");
 const path = "./accounts.json";
+const cors = require('cors');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -17,7 +18,7 @@ const bot = new TelegramBot(TELEGRAM_BOT_TOKEN);
 bot.setWebHook(
   `https://dota2-stats-app-backend.onrender.com/bot${TELEGRAM_BOT_TOKEN}`
 );
-
+app.use(cors());
 app.use(bodyParser.json());
 
 let userAccountIds = {};
