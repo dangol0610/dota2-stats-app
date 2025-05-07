@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const TelegramBot = require('node-telegram-bot-api');
-const fetch = require('node-fetch'); // добавим для запросов с backend
+const fetch = require('node-fetch').default; // добавим для запросов с backend
 
 const app = express();
 const PORT = process.env.PORT || 3000;
