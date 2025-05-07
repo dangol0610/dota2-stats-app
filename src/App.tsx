@@ -112,20 +112,20 @@ function AppContent() {
               setAccountId(Number(data.accountId));
             } else {
               console.log("❌ Привязки нет, используется дефолтный.");
-              setAccountId(153709817); // или можно null, чтобы показать форму поиска
+              setAccountId(null); // или можно null, чтобы показать форму поиска
             }
           })
           .catch((err) => {
             console.error("Ошибка запроса:", err);
-            setAccountId(153709817); // fallback
+            setAccountId(null); // fallback
           });
       } else {
         console.log("❌ Telegram ID не найден → fallback");
-        setAccountId(153709817);
+        setAccountId(null);
       }
     } else {
       console.log("❌ WebApp API не найден → fallback");
-      setAccountId(153709817);
+      setAccountId(null);
     }
   }, []);
 
