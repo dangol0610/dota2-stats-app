@@ -65,7 +65,7 @@ bot.on('message', async (msg) => {
     const accountId = text;
     try {
       // сохраняем через backend API (локально сохраняется, но показываю как POST)
-      await fetch(`http://localhost:${PORT}/saveAccountId`, {
+      await fetch(`https://dota2-stats-app-backend.onrender.com/saveAccountId`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ telegramId, accountId }),
