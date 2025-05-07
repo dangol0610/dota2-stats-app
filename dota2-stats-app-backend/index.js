@@ -10,12 +10,18 @@ const PORT = process.env.PORT || 3000;
 const TELEGRAM_BOT_TOKEN = process.env.BOT_TOKEN;
 const FRONTEND_URL = process.env.FRONTEND_URL || 'https://dota2-stats-app.vercel.app'; // URL твоего WebApp
 
-const bot = new TelegramBot(TELEGRAM_BOT_TOKEN, { polling: true }); // включаем polling
+const bot = new TelegramBot(TELEGRAM_BOT_TOKEN);
+bot.setWebHook(`https://dota2-stats-app-backend.onrender.com/bot${TELEGRAM_BOT_TOKEN}`);
 
 app.use(bodyParser.json());
 
 // временное хранилище
 const userAccountIds = {};
+
+app.post(`/bot${TELEGRAM_BOT_TOKEN}`, (req, res) => {
+    bot.processUpdate(req.body);
+    res.sendStatus(200);
+  });
 
 // API endpoint для сохранения accountId
 app.post('/saveAccountId', (req, res) => {
@@ -92,4 +98,8 @@ bot.on('message', async (msg) => {
 // запуск сервера
 app.listen(PORT, () => {
   console.log(`🚀 Backend server running on port ${PORT}`);
+  app.post(`/bot${TELEGRAM_BOT_TOKEN}`, (req, res) => {
+    bot.processUpdate(req.body);
+    res.sendStatus(200);
+  });
 });
