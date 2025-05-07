@@ -5,7 +5,7 @@ const TelegramBot = require("node-telegram-bot-api");
 const fetch = require("node-fetch").default; // добавим для запросов с backend
 const fs = require("fs");
 const path = "./accounts.json";
-const cors = require('cors');
+const cors = require("cors");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -48,7 +48,7 @@ app.post("/saveAccountId", (req, res) => {
 // API endpoint для получения accountId
 app.get("/getAccountId", (req, res) => {
   const telegramId = req.query.telegramId;
-  console.log('▶️ Запрос accountId для telegramId:', telegramId);
+  console.log("▶️ Запрос accountId для telegramId:", telegramId);
   if (!telegramId) {
     return res.status(400).json({ error: "Missing telegramId" });
   }
@@ -107,11 +107,12 @@ bot.on("message", async (msg) => {
       // отправляем кнопку для запуска WebApp
       await bot.sendMessage(
         telegramId,
-        "✅ Твой Dota ID сохранён! Нажми кнопку ниже, чтобы открыть статистику:",
+        "✅ Твой Dota ID сохранён! Нажми кнопку ниже, чтобы открыть статистику или изменить ID:",
         {
           reply_markup: {
             inline_keyboard: [
               [{ text: "Открыть статистику", web_app: { url: FRONTEND_URL } }],
+              [{ text: "Изменить ID", callback_data: "change_id" }],
             ],
           },
         }
@@ -129,6 +130,25 @@ bot.on("message", async (msg) => {
       telegramId,
       "Пожалуйста, отправь свой Dota ID числом (например, 123456789)."
     );
+  }
+});
+
+bot.on("callback_query", async (query) => {
+  const telegramId = query.from.id;
+  const data = query.data;
+
+  if (data === "change_id") {
+    // Можно удалить старый ID (если хочешь)
+    delete userAccountIds[telegramId];
+
+    // Отправляем сообщение с инструкцией
+    await bot.sendMessage(
+      telegramId,
+      "🔄 Пожалуйста, отправь мне новый Dota ID числом."
+    );
+
+    // Опционально — уведомим Telegram, что callback обработан
+    await bot.answerCallbackQuery(query.id);
   }
 });
 
