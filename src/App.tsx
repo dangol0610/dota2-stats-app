@@ -40,24 +40,9 @@ function Header({
           {showReturnButton && onReturn && (
             <button
               onClick={onReturn}
-              className="flex items-center gap-1 bg-yellow-500 text-black px-2 py-1 rounded hover:bg-yellow-400 transition text-sm"
-              title="Вернуться в свой профиль"
+              className="bg-gray-700 text-black px-3 py-1 rounded hover:bg-yellow-400 transition"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
-              <span>Вернуться</span>
+              ← Вернуться
             </button>
           )}
           <NavLink
