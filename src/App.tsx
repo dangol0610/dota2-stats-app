@@ -40,7 +40,7 @@ function Header({
           {showReturnButton && onReturn && (
             <button
               onClick={onReturn}
-              className="bg-gray-700 text-black px-3 py-1 rounded hover:bg-yellow-400 transition"
+              className="bg-gray-400 text-black px-3 py-1 rounded hover:bg-yellow-400 transition"
             >
               ← Вернуться
             </button>
