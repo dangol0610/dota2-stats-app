@@ -40,9 +40,9 @@ function Header({
           {showReturnButton && onReturn && (
             <button
               onClick={onReturn}
-              className="bg-gray-400 text-black px-3 py-1 rounded hover:bg-yellow-400 transition"
+              className="text-white hover:text-yellow transition"
             >
-              ← Вернуться
+              ← Вернуться в профиль
             </button>
           )}
           <NavLink
