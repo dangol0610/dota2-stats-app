@@ -11,6 +11,7 @@ import { PlayerProfile } from "./components/PlayerProfile";
 import { MatchList } from "./components/MatchList";
 import { HeroStats } from "./components/HeroStats";
 import { HeroDetail } from "./components/HeroDetail";
+import { MatchDetail } from "./components/MatchDetail";
 
 function Header({
   onSearch,
@@ -193,6 +194,7 @@ function AppContent() {
                 path="/hero/:heroId"
                 element={<HeroDetail accountId={accountId} />}
               />
+              <Route path="/match/:matchId" element={<MatchDetail />} />
             </Routes>
           </>
         )}
