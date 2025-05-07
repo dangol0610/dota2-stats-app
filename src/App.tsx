@@ -12,7 +12,15 @@ import { MatchList } from "./components/MatchList";
 import { HeroStats } from "./components/HeroStats";
 import { HeroDetail } from "./components/HeroDetail";
 
-function Header({ onSearch }: { onSearch: (id: string) => void }) {
+function Header({
+  onSearch,
+  showReturnButton,
+  onReturn,
+}: {
+  onSearch: (id: string) => void;
+  showReturnButton?: boolean;
+  onReturn?: () => void;
+}) {
   const [searchValue, setSearchValue] = useState("");
   const navigate = useNavigate();
 
@@ -28,7 +36,15 @@ function Header({ onSearch }: { onSearch: (id: string) => void }) {
     <div className="bg-gray-900 py-4 px-4 sm:px-8 shadow w-full">
       <div className="max-w-screen-xl mx-auto w-full flex flex-col gap-4">
         {/* Ряд с навигацией */}
-        <div className="flex flex-wrap justify-center sm:justify-start gap-4">
+        <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4">
+          {showReturnButton && onReturn && (
+            <button
+              onClick={onReturn}
+              className="bg-yellow-500 text-black px-3 py-1 rounded hover:bg-yellow-400 transition"
+            >
+              Вернуться
+            </button>
+          )}
           <NavLink
             to="/"
             className={({ isActive }) =>
@@ -91,6 +107,7 @@ function Header({ onSearch }: { onSearch: (id: string) => void }) {
 
 function AppContent() {
   const [accountId, setAccountId] = useState<number | null>(null);
+  const [linkedAccountId, setLinkedAccountId] = useState<number | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -109,7 +126,8 @@ function AppContent() {
           .then((data) => {
             if (data.accountId) {
               console.log("✅ Привязанный accountId найден:", data.accountId);
-              setAccountId(Number(data.accountId));
+              setLinkedAccountId(Number(data.accountId)); // сохраняем привязанный
+              setAccountId(Number(data.accountId)); // и ставим как текущий
             } else {
               console.log("❌ Привязки нет, используется дефолтный.");
               setAccountId(null); // или можно null, чтобы показать форму поиска
@@ -134,27 +152,18 @@ function AppContent() {
     if (!isNaN(numId)) {
       setAccountId(numId);
       navigate("/");
-
-      // при вводе нового ID → можно также отправить его на backend для обновления
-      const telegramId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id;
-      if (telegramId) {
-        fetch("https://dota2-stats-app-backend.onrender.com/saveAccountId", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ telegramId, accountId: numId }),
-        })
-          .then((res) => res.json())
-          .then((data) => console.log("✅ accountId сохранён:", data))
-          .catch((err) =>
-            console.error("❌ Ошибка сохранения accountId:", err)
-          );
-      }
     }
   };
 
   return (
     <>
-      <Header onSearch={handleSearch} />
+      <Header
+        onSearch={handleSearch}
+        showReturnButton={
+          linkedAccountId !== null && accountId !== linkedAccountId
+        }
+        onReturn={() => setAccountId(linkedAccountId)}
+      />
       <div className="w-full mx-auto p-4 text-white">
         {accountId !== null && (
           <>
