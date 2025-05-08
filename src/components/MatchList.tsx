@@ -210,7 +210,7 @@ export function MatchList({ accountId }: Props) {
               <div
                 key={match.match_id}
                 className="bg-gray-800 text-white px-4 py-3 rounded-xl shadow
-                         flex flex-col sm:grid sm:grid-cols-7 gap-3"
+                         flex flex-col sm:grid sm:[grid-template-columns:minmax(120px,1fr) 60px 80px 80px 80px 80px auto] gap-3"
               >
                 {/* Герой */}
                 <div className="flex items-center gap-3">
