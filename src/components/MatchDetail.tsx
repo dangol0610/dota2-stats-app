@@ -95,6 +95,12 @@ export function MatchDetail() {
   const radiantKills = matchData.players
     .filter((p: Player) => p.player_slot < 128)
     .reduce((sum: number, p: Player) => sum + p.kills, 0);
+  const matchDate = new Date(matchData.start_time * 1000);
+  const formattedDate = matchDate.toLocaleDateString("ru-RU"); // формат ДД.ММ.ГГГГ
+  const formattedTime = matchDate.toLocaleTimeString("ru-RU", {
+    hour: "2-digit",
+    minute: "2-digit",
+  }); // ЧЧ:ММ
 
   const direKills = matchData.players
     .filter((p: Player) => p.player_slot >= 128)
@@ -195,12 +201,15 @@ export function MatchDetail() {
         <div className="text-gray-400 text-sm">
           Длительность: {matchDuration}
         </div>
+        <div className="text-gray-400 text-sm">
+          Дата: {formattedDate} {formattedTime}
+        </div>
         <div className={`font-semibold ${winnerColor}`}>
           Победитель: {winnerText}
         </div>
-        <div className="text-gray-300 text-sm">
-          <span className="text-green-400 font-bold">{radiantKills}</span> :{" "}
-          <span className="text-red-400 font-bold">{direKills}</span>
+        <div className="text-gray-300 text-lg font-semibold">
+          <span className="text-green-400">{radiantKills}</span> :{" "}
+          <span className="text-red-400">{direKills}</span>
         </div>
       </div>
 
