@@ -92,6 +92,13 @@ export function MatchDetail() {
   const radiantWin = matchData.radiant_win;
   const winnerText = radiantWin ? "Силы Света" : "Силы Тьмы";
   const winnerColor = radiantWin ? "text-green-400" : "text-red-400";
+  const radiantKills = matchData.players
+    .filter((p: Player) => p.player_slot < 128)
+    .reduce((sum: number, p: Player) => sum + p.kills, 0);
+
+  const direKills = matchData.players
+    .filter((p: Player) => p.player_slot >= 128)
+    .reduce((sum: number, p: Player) => sum + p.kills, 0);
 
   const renderPlayerCard = (player: Player, index: number) => {
     const hero = getHero(player.hero_id);
@@ -190,6 +197,10 @@ export function MatchDetail() {
         </div>
         <div className={`font-semibold ${winnerColor}`}>
           Победитель: {winnerText}
+        </div>
+        <div className="text-gray-300 text-sm">
+          <span className="text-green-400">{radiantKills}</span> :{" "}
+          <span className="text-red-400">{direKills}</span>
         </div>
       </div>
 
