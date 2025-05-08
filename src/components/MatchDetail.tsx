@@ -199,8 +199,8 @@ export function MatchDetail() {
           Победитель: {winnerText}
         </div>
         <div className="text-gray-300 text-sm">
-          <span className="text-green-400">{radiantKills}</span> :{" "}
-          <span className="text-red-400">{direKills}</span>
+          <span className="text-green-400 font-bold">{radiantKills}</span> :{" "}
+          <span className="text-red-400 font-bold">{direKills}</span>
         </div>
       </div>
 
