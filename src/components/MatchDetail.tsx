@@ -47,13 +47,6 @@ export function MatchDetail() {
     fetcher
   );
 
-  const matchDuration = `${Math.floor(matchData.duration / 60)}m ${
-    matchData.duration % 60
-  }s`;
-  const radiantWin = matchData.radiant_win;
-  const winnerText = radiantWin ? "Силы Света" : "Силы Тьмы";
-  const winnerColor = radiantWin ? "text-green-400" : "text-red-400";
-
   useEffect(() => {
     fetch(`https://api.opendota.com/api/matches/${matchId}`)
       .then((res) => res.json())
@@ -88,6 +81,13 @@ export function MatchDetail() {
       <div className="text-white text-center p-4">Загрузка данных матча...</div>
     );
   }
+
+  const matchDuration = `${Math.floor(matchData.duration / 60)}m ${
+    matchData.duration % 60
+  }s`;
+  const radiantWin = matchData.radiant_win;
+  const winnerText = radiantWin ? "Силы Света" : "Силы Тьмы";
+  const winnerColor = radiantWin ? "text-green-400" : "text-red-400";
 
   const renderPlayerCard = (player: Player, index: number) => {
     const hero = getHero(player.hero_id);
