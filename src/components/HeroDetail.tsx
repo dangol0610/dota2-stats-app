@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import useSWR from "swr";
 import { fetcher } from "../api/opendota";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 interface Props {
   accountId: number;
@@ -207,10 +208,10 @@ export function HeroDetail({ accountId }: Props) {
           ];
 
           return (
-            <div
+            <Link
               key={match.match_id}
-              className="bg-gray-800 text-white px-4 py-3 rounded-xl shadow
-                 flex flex-col sm:grid sm:grid-cols-7 gap-3"
+              to={`/match/${match.match_id}`}
+              className="block bg-gray-800 text-white px-4 py-3 rounded-xl shadow hover:bg-gray-700 transition flex flex-col sm:grid sm:grid-cols-7 gap-3"
             >
               {/* Герой */}
               <div className="flex items-center gap-3">
@@ -219,7 +220,9 @@ export function HeroDetail({ accountId }: Props) {
                   alt={hero.localized_name}
                   className="w-10 h-10 rounded"
                 />
-                <div className="text-sm text-left sm:text-center font-medium">{hero.localized_name}</div>
+                <div className="text-sm text-left sm:text-center font-medium">
+                  {hero.localized_name}
+                </div>
               </div>
 
               {/* K/D/A */}
@@ -278,7 +281,7 @@ export function HeroDetail({ accountId }: Props) {
                   );
                 })}
               </div>
-            </div>
+            </Link>
           );
         })}
         {loading ? (
