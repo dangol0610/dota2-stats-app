@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 import { fetcher } from "../api/opendota";
+import { useNavigate } from "react-router-dom";
 
 interface Player {
   account_id: number;
@@ -37,9 +38,16 @@ interface Item {
 export function MatchDetail() {
   const { matchId } = useParams();
   const [matchData, setMatchData] = useState<any>(null);
+  const navigate = useNavigate();
 
-  const { data: heroes } = useSWR<Hero[]>("https://api.opendota.com/api/heroes", fetcher);
-  const { data: items } = useSWR<Record<string, Item>>("https://api.opendota.com/api/constants/items", fetcher);
+  const { data: heroes } = useSWR<Hero[]>(
+    "https://api.opendota.com/api/heroes",
+    fetcher
+  );
+  const { data: items } = useSWR<Record<string, Item>>(
+    "https://api.opendota.com/api/constants/items",
+    fetcher
+  );
 
   useEffect(() => {
     fetch(`https://api.opendota.com/api/matches/${matchId}`)
@@ -50,7 +58,9 @@ export function MatchDetail() {
 
   const getHero = (id: number) => {
     if (!heroes) return { name: "", localized_name: "Unknown" };
-    return heroes.find((h) => h.id === id) ?? { name: "", localized_name: "Unknown" };
+    return (
+      heroes.find((h) => h.id === id) ?? { name: "", localized_name: "Unknown" }
+    );
   };
 
   const getHeroImageUrl = (name: string) => {
@@ -60,17 +70,25 @@ export function MatchDetail() {
 
   const getItemImg = (itemId: number) => {
     if (!items || itemId === 0) return null;
-    const entry = Object.entries(items).find(([, value]) => value.id === itemId);
-    return entry ? `https://cdn.cloudflare.steamstatic.com${entry[1].img}` : null;
+    const entry = Object.entries(items).find(
+      ([, value]) => value.id === itemId
+    );
+    return entry
+      ? `https://cdn.cloudflare.steamstatic.com${entry[1].img}`
+      : null;
   };
 
   // ❗️ Проверка данных
   if (!matchData || !heroes || !items) {
-    return <div className="text-white text-center p-4">Загрузка данных матча...</div>;
+    return (
+      <div className="text-white text-center p-4">Загрузка данных матча...</div>
+    );
   }
 
   // ❗️ Все вычисления ПОД проверкой
-  const matchDuration = `${Math.floor(matchData.duration / 60)}m ${matchData.duration % 60}s`;
+  const matchDuration = `${Math.floor(matchData.duration / 60)}m ${
+    matchData.duration % 60
+  }s`;
   const radiantWin = matchData.radiant_win;
   const winnerText = radiantWin ? "Силы Света" : "Силы Тьмы";
   const winnerColor = radiantWin ? "text-green-400" : "text-red-400";
@@ -127,7 +145,8 @@ export function MatchDetail() {
         {/* LH/DN */}
         <div className="text-sm text-left sm:text-center">
           <span className="sm:hidden text-gray-400 mr-1">LH/DN:</span>
-          {player.last_hits}/{player.denies}
+          <span className="text-green-400">{player.last_hits}</span>/
+          <span className="text-blue-400">{player.denies}</span>
         </div>
 
         {/* Предметы */}
@@ -155,12 +174,20 @@ export function MatchDetail() {
 
   return (
     <div className="space-y-2 mt-4">
+      <button
+        onClick={() => navigate(-1)}
+        className="px-4 py-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition"
+      >
+        ← Назад к матчам
+      </button>
       {/* Информация о матче */}
       <div className="bg-gray-800 rounded-xl shadow p-4 text-center space-y-1">
         <h3 className="text-xl font-semibold text-white">
           Матч #{matchData.match_id}
         </h3>
-        <div className="text-gray-400 text-sm">Длительность: {matchDuration}</div>
+        <div className="text-gray-400 text-sm">
+          Длительность: {matchDuration}
+        </div>
         <div className={`font-semibold ${winnerColor}`}>
           Победитель: {winnerText}
         </div>
