@@ -38,14 +38,8 @@ export function MatchDetail() {
   const { matchId } = useParams();
   const [matchData, setMatchData] = useState<any>(null);
 
-  const { data: heroes } = useSWR<Hero[]>(
-    "https://api.opendota.com/api/heroes",
-    fetcher
-  );
-  const { data: items } = useSWR<Record<string, Item>>(
-    "https://api.opendota.com/api/constants/items",
-    fetcher
-  );
+  const { data: heroes } = useSWR<Hero[]>("https://api.opendota.com/api/heroes", fetcher);
+  const { data: items } = useSWR<Record<string, Item>>("https://api.opendota.com/api/constants/items", fetcher);
 
   useEffect(() => {
     fetch(`https://api.opendota.com/api/matches/${matchId}`)
@@ -56,9 +50,7 @@ export function MatchDetail() {
 
   const getHero = (id: number) => {
     if (!heroes) return { name: "", localized_name: "Unknown" };
-    return (
-      heroes.find((h) => h.id === id) ?? { name: "", localized_name: "Unknown" }
-    );
+    return heroes.find((h) => h.id === id) ?? { name: "", localized_name: "Unknown" };
   };
 
   const getHeroImageUrl = (name: string) => {
@@ -68,23 +60,17 @@ export function MatchDetail() {
 
   const getItemImg = (itemId: number) => {
     if (!items || itemId === 0) return null;
-    const entry = Object.entries(items).find(
-      ([, value]) => value.id === itemId
-    );
-    return entry
-      ? `https://cdn.cloudflare.steamstatic.com${entry[1].img}`
-      : null;
+    const entry = Object.entries(items).find(([, value]) => value.id === itemId);
+    return entry ? `https://cdn.cloudflare.steamstatic.com${entry[1].img}` : null;
   };
 
+  // ❗️ Проверка данных
   if (!matchData || !heroes || !items) {
-    return (
-      <div className="text-white text-center p-4">Загрузка данных матча...</div>
-    );
+    return <div className="text-white text-center p-4">Загрузка данных матча...</div>;
   }
 
-  const matchDuration = `${Math.floor(matchData.duration / 60)}m ${
-    matchData.duration % 60
-  }s`;
+  // ❗️ Все вычисления ПОД проверкой
+  const matchDuration = `${Math.floor(matchData.duration / 60)}m ${matchData.duration % 60}s`;
   const radiantWin = matchData.radiant_win;
   const winnerText = radiantWin ? "Силы Света" : "Силы Тьмы";
   const winnerColor = radiantWin ? "text-green-400" : "text-red-400";
@@ -169,20 +155,18 @@ export function MatchDetail() {
 
   return (
     <div className="space-y-2 mt-4">
-      {/* --- Информация о матче сверху --- */}
+      {/* Информация о матче */}
       <div className="bg-gray-800 rounded-xl shadow p-4 text-center space-y-1">
         <h3 className="text-xl font-semibold text-white">
           Матч #{matchData.match_id}
         </h3>
-        <div className="text-gray-400 text-sm">
-          Длительность: {matchDuration}
-        </div>
+        <div className="text-gray-400 text-sm">Длительность: {matchDuration}</div>
         <div className={`font-semibold ${winnerColor}`}>
           Победитель: {winnerText}
         </div>
       </div>
 
-      {/* Заголовки таблицы — только на больших экранах */}
+      {/* Заголовки таблицы (только на больших экранах) */}
       <div className="hidden sm:grid grid-cols-7 items-center text-gray-400 text-sm px-4 py-2">
         <div className="text-left">Герой</div>
         <div className="text-center">K/D/A</div>
