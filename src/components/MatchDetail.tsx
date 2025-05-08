@@ -38,15 +38,8 @@ export function MatchDetail() {
   const { matchId } = useParams();
   const [matchData, setMatchData] = useState<any>(null);
 
-  const { data: heroes } = useSWR<Hero[]>(
-    "https://api.opendota.com/api/heroes",
-    fetcher
-  );
-
-  const { data: items } = useSWR<Record<string, Item>>(
-    "https://api.opendota.com/api/constants/items",
-    fetcher
-  );
+  const { data: heroes } = useSWR<Hero[]>("https://api.opendota.com/api/heroes", fetcher);
+  const { data: items } = useSWR<Record<string, Item>>("https://api.opendota.com/api/constants/items", fetcher);
 
   useEffect(() => {
     fetch(`https://api.opendota.com/api/matches/${matchId}`)
@@ -77,88 +70,77 @@ export function MatchDetail() {
 
   const renderPlayerRow = (player: Player, index: number) => {
     const hero = getHero(player.hero_id);
-    const isRadiant = player.player_slot < 128;
-
     const itemsMain = [
-      player.item_0,
-      player.item_1,
-      player.item_2,
-      player.item_3,
-      player.item_4,
-      player.item_5,
+      player.item_0, player.item_1, player.item_2,
+      player.item_3, player.item_4, player.item_5,
     ];
 
     return (
-      <tr key={index} className="border-t border-gray-700 text-center">
-        <td className="flex items-center gap-2 py-1">
-          <img
-            src={getHeroImageUrl(hero.name)}
-            alt={hero.localized_name}
-            className="w-8 h-8 rounded"
-          />
-          <span>{hero.localized_name}</span>
-        </td>
-        <td>{player.kills}/{player.deaths}/{player.assists}</td>
-        <td>{player.gold_per_min}/{player.xp_per_min}</td>
-        <td>{player.hero_damage}</td>
-        <td>{player.last_hits}/{player.denies}</td>
-        <td>
+      <div
+        key={index}
+        className="bg-gray-800 rounded-lg shadow p-3 flex flex-col sm:grid sm:grid-cols-7 gap-2 items-center"
+      >
+        {/* Герой */}
+        <div className="flex items-center gap-2">
+          <img src={getHeroImageUrl(hero.name)} alt={hero.localized_name} className="w-10 h-10 rounded" />
+          <span className="text-sm font-medium">{hero.localized_name}</span>
+        </div>
+
+        {/* K/D/A */}
+        <div className="text-sm text-center">
+          <span className="text-green-400">{player.kills}</span>/
+          <span className="text-red-400">{player.deaths}</span>/
+          <span className="text-blue-400">{player.assists}</span>
+        </div>
+
+        {/* GPM/XPM */}
+        <div className="text-sm text-center text-yellow-300">
+          {player.gold_per_min}/{player.xp_per_min}
+        </div>
+
+        {/* Урон */}
+        <div className="text-sm text-center">{player.hero_damage}</div>
+
+        {/* LH/DN */}
+        <div className="text-sm text-center">{player.last_hits}/{player.denies}</div>
+
+        {/* Предметы */}
+        <div className="flex flex-wrap justify-center gap-1">
           {itemsMain.map((id, i) => {
             const img = getItemImg(id);
             return img ? (
-              <img key={i} src={img} alt={`item-${id}`} className="inline-block h-6 mx-0.5" />
+              <img key={i} src={img} alt={`item-${id}`} className="h-7 w-7 rounded border border-gray-700" />
             ) : (
-              <div key={i} className="inline-block h-6 w-6 bg-gray-700 border border-gray-600 mx-0.5" />
+              <div key={i} className="h-7 w-7 rounded border border-gray-700 bg-gray-700" />
             );
           })}
-        </td>
-      </tr>
+        </div>
+
+      </div>
     );
   };
 
   return (
-    <div className="text-white p-4 max-w-screen-lg mx-auto">
-      <h1 className="text-xl font-bold mb-4">Матч #{matchData.match_id}</h1>
+    <div className="text-white p-4 max-w-screen-lg mx-auto space-y-6">
+      <h1 className="text-2xl font-bold text-yellow-400 text-center mb-4">
+        Матч #{matchData.match_id}
+      </h1>
 
       {/* Radiant */}
-      <h2 className="text-green-400 font-semibold mb-2">Силы Света</h2>
-      <table className="w-full text-sm mb-6 border border-gray-600">
-        <thead>
-          <tr className="bg-gray-800">
-            <th className="text-left px-2">Герой</th>
-            <th>K/D/A</th>
-            <th>GPM/XPM</th>
-            <th>Урон</th>
-            <th>LH/DN</th>
-            <th>Предметы</th>
-          </tr>
-        </thead>
-        <tbody>
-          {matchData.players
-            .filter((p: Player) => p.player_slot < 128)
-            .map(renderPlayerRow)}
-        </tbody>
-      </table>
+      <div>
+        <h2 className="text-green-400 text-lg font-semibold mb-2">Силы Света</h2>
+        <div className="space-y-2">
+          {matchData.players.filter((p: Player) => p.player_slot < 128).map(renderPlayerRow)}
+        </div>
+      </div>
 
       {/* Dire */}
-      <h2 className="text-red-400 font-semibold mb-2">Силы Тьмы</h2>
-      <table className="w-full text-sm border border-gray-600">
-        <thead>
-          <tr className="bg-gray-800">
-            <th className="text-left px-2">Герой</th>
-            <th>K/D/A</th>
-            <th>GPM/XPM</th>
-            <th>Урон</th>
-            <th>LH/DN</th>
-            <th>Предметы</th>
-          </tr>
-        </thead>
-        <tbody>
-          {matchData.players
-            .filter((p: Player) => p.player_slot >= 128)
-            .map(renderPlayerRow)}
-        </tbody>
-      </table>
+      <div>
+        <h2 className="text-red-400 text-lg font-semibold mb-2">Силы Тьмы</h2>
+        <div className="space-y-2">
+          {matchData.players.filter((p: Player) => p.player_slot >= 128).map(renderPlayerRow)}
+        </div>
+      </div>
     </div>
   );
 }
