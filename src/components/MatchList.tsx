@@ -207,81 +207,73 @@ export function MatchList({ accountId }: Props) {
               to={`/match/${match.match_id}`}
               className="block bg-gray-800 text-white px-4 py-3 rounded-xl shadow hover:bg-gray-700 transition flex flex-col sm:grid sm:grid-cols-7 gap-3"
             >
-              <div
-                key={match.match_id}
-                className="bg-gray-800 text-white px-4 py-3 rounded-xl shadow
-                         flex flex-col sm:grid sm:grid-cols-7 gap-3"
-              >
-                {/* Герой */}
-                <div className="flex items-center gap-3">
-                  <img
-                    src={getHeroImageUrl(hero.name)}
-                    alt={hero.localized_name}
-                    className="w-10 h-10 rounded"
-                  />
-                  <div className="text-sm text-left sm:text-center font-medium">
-                    {hero.localized_name}
-                  </div>
+              {/* Герой */}
+              <div className="flex items-center gap-3">
+                <img
+                  src={getHeroImageUrl(hero.name)}
+                  alt={hero.localized_name}
+                  className="w-10 h-10 rounded"
+                />
+                <div className="text-sm text-left sm:text-center font-medium">
+                  {hero.localized_name}
                 </div>
+              </div>
 
-                {/* K/D/A */}
-                <div className="text-sm text-left sm:text-center">
-                  <span className="sm:hidden text-gray-400 mr-1">K/D/A:</span>
-                  <span className="text-green-400">{match.kills}</span>/
-                  <span className="text-red-400">{match.deaths}</span>/
-                  <span className="text-blue-400">{match.assists}</span>
-                </div>
+              {/* K/D/A */}
+              <div className="text-sm text-left sm:text-center">
+                <span className="sm:hidden text-gray-400 mr-1">K/D/A:</span>
+                <span className="text-green-400">{match.kills}</span>/
+                <span className="text-red-400">{match.deaths}</span>/
+                <span className="text-blue-400">{match.assists}</span>
+              </div>
 
-                {/* GPM/XPM */}
-                <div className="text-sm text-left sm:text-center">
-                  <span className="sm:hidden text-gray-400 mr-1">GPM/XPM:</span>
-                  <span className="text-yellow-400">{match.gold_per_min}</span>/
-                  <span>{match.xp_per_min}</span>
-                </div>
+              {/* GPM/XPM */}
+              <div className="text-sm text-left sm:text-center">
+                <span className="sm:hidden text-gray-400 mr-1">GPM/XPM:</span>
+                <span className="text-yellow-400">{match.gold_per_min}</span>/
+                <span>{match.xp_per_min}</span>
+              </div>
 
-                {/* Длительность */}
-                <div className="text-sm text-left sm:text-center">
-                  <span className="sm:hidden text-gray-400 mr-1">
-                    Длительность:
-                  </span>
-                  {formatDuration(match.duration)}
-                </div>
+              {/* Длительность */}
+              <div className="text-sm text-left sm:text-center">
+                <span className="sm:hidden text-gray-400 mr-1">
+                  Длительность:
+                </span>
+                {formatDuration(match.duration)}
+              </div>
 
-                {/* Время матча */}
-                <div className="text-sm text-left sm:text-center text-gray-400">
-                  <span className="sm:hidden text-gray mr-1">Когда:</span>
-                  {timeAgo(match.start_time)}
-                </div>
+              {/* Когда */}
+              <div className="text-sm text-left sm:text-center text-gray-400">
+                <span className="sm:hidden text-gray mr-1">Когда:</span>
+                {timeAgo(match.start_time)}
+              </div>
 
-                {/* Результат */}
-                <div className="text-sm text-left sm:text-center font-bold">
-                  <span className="sm:hidden text-gray-400 mr-1">
-                    Результат:
-                  </span>
-                  <span className={isWin ? "text-green-400" : "text-red-400"}>
-                    {isWin ? "Победа" : "Поражение"}
-                  </span>
-                </div>
+              {/* Результат */}
+              <div className="text-sm text-left sm:text-center font-bold">
+                <span className="sm:hidden text-gray-400 mr-1">Результат:</span>
+                <span className={isWin ? "text-green-400" : "text-red-400"}>
+                  {isWin ? "Победа" : "Поражение"}
+                </span>
+              </div>
 
-                {/* Предметы */}
-                <div className="flex flex-wrap gap-1">
-                  {itemsMain.map((id, i) => {
-                    const src = getItemImg(id);
-                    return src ? (
-                      <img
-                        key={i}
-                        src={src}
-                        alt={`item-${id}`}
-                        className="w-7 h-7 rounded border border-gray-700"
-                      />
-                    ) : (
-                      <div
-                        key={i}
-                        className="w-7 h-7 border border-gray-700 bg-gray-700 rounded"
-                      />
-                    );
-                  })}
-                </div>
+              {/* Предметы */}
+              <div className="flex flex-wrap gap-1 justify-center">
+                {itemsMain.map((id, i) => {
+                  const src = getItemImg(id);
+                  return src ? (
+                    <img
+                      key={i}
+                      src={src}
+                      alt={`item-${id}`}
+                      className="w-7 h-7 rounded border border-gray-700"
+                    />
+                  ) : (
+                    <div
+                      key={i}
+                      className="w-7 h-7 border border-gray-700 bg-gray-700 rounded"
+                    />
+                  );
+                })}
               </div>
             </Link>
           );
