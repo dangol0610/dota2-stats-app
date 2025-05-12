@@ -158,6 +158,7 @@ bot.on("callback_query", async (query) => {
 
     try {
       fs.writeFileSync(path, JSON.stringify(userAccountIds, null, 2));
+      console.log("📦 accounts.json обновлён:", userAccountIds);
     } catch (e) {
       console.error("❌ Ошибка при удалении ID:", e);
     }
