@@ -186,7 +186,7 @@ export function HeroStats({ accountId }: Props) {
         {sortedStats.map((hero) => (
           <Link
             key={hero.hero_id}
-            className="bg-gray-800 rounded-xl p-4 shadow flex flex-col gap-2 hover:bg-gray-700"
+            className="bg-gray-700 rounded-xl p-4 shadow flex flex-col gap-2 hover:bg-gray-600"
             to={`/hero/${hero.hero_id}`}
           >
             <div className="flex items-center gap-4">
