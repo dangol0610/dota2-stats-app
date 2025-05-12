@@ -184,9 +184,10 @@ export function HeroStats({ accountId }: Props) {
       {/* CARD-VIEW для мобильных */}
       <div className="block sm:hidden space-y-3 mt-4">
         {sortedStats.map((hero) => (
-          <div
+          <Link
             key={hero.hero_id}
             className="bg-gray-700 rounded-xl p-4 shadow flex flex-col gap-2"
+            to={`/hero/${hero.hero_id}`}
           >
             <div className="flex items-center gap-4">
               <img
@@ -194,12 +195,8 @@ export function HeroStats({ accountId }: Props) {
                 alt={hero.name}
                 className="w-10 h-10 rounded-md"
               />
-              <Link
-                to={`/hero/${hero.hero_id}`}
-                className="font-semibold hover:underline"
-              >
-                {hero.name}
-              </Link>
+
+              {hero.name}
             </div>
             <div className="text-sm">
               <span className="text-gray-400">Игры: </span>
@@ -217,7 +214,7 @@ export function HeroStats({ accountId }: Props) {
               <span className="text-gray-400">Винрейт: </span>
               <span>{hero.winrate.toFixed(2)}%</span>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
