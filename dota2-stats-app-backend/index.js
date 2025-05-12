@@ -42,22 +42,20 @@ app.post(`/bot${TELEGRAM_BOT_TOKEN}`, (req, res) => {
 // ✅ Сохраняем связку telegramId → accountId в файл
 app.post("/saveAccountId", (req, res) => {
   const { telegramId, accountId } = req.body;
+
   if (!telegramId || !accountId) {
+    console.warn("❌ Не передан telegramId или accountId");
     return res.status(400).json({ error: "Missing telegramId or accountId" });
   }
 
-  userAccountIds[telegramId] = accountId;
+  // обязательно приводи к строке!
+  const key = telegramId.toString();
+  userAccountIds[key] = accountId;
 
-  try {
-    fs.writeFileSync(path, JSON.stringify(userAccountIds, null, 2));
-    console.log(
-      `✅ Сохранён accountId ${accountId} для telegramId ${telegramId}`
-    );
-    res.json({ success: true });
-  } catch (e) {
-    console.error("❌ Ошибка записи в файл:", e);
-    res.status(500).json({ error: "Failed to save accountId" });
-  }
+  fs.writeFileSync(path, JSON.stringify(userAccountIds, null, 2));
+  console.log("📦 accounts.json обновлён:", userAccountIds);
+
+  res.json({ success: true });
 });
 
 // 🔍 Получаем привязанный accountId
@@ -158,7 +156,7 @@ bot.on("callback_query", async (query) => {
 
     try {
       fs.writeFileSync(path, JSON.stringify(userAccountIds, null, 2));
-      console.log("📦 accounts.json обновлён:", userAccountIds);
+      console.log("📨 Сохраняем ID:", telegramId, accountId);
     } catch (e) {
       console.error("❌ Ошибка при удалении ID:", e);
     }
