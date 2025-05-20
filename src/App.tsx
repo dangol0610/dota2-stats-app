@@ -36,7 +36,6 @@ function Header({
   return (
     <div className="bg-gray-900 py-4 px-4 sm:px-8 shadow w-full">
       <div className="max-w-screen-xl mx-auto w-full flex flex-col gap-4">
-        {/* Ряд с навигацией */}
         <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4">
           {showReturnButton && onReturn && (
             <button
@@ -82,7 +81,6 @@ function Header({
           </NavLink>
         </div>
 
-        {/* Ряд с формой поиска */}
         <form
           onSubmit={handleSubmit}
           className="flex w-full sm:w-auto items-center bg-gray-700 rounded-md overflow-hidden"
@@ -141,16 +139,16 @@ function AppContent() {
           .then((data) => {
             if (data.accountId) {
               console.log("✅ Привязанный accountId найден:", data.accountId);
-              setLinkedAccountId(Number(data.accountId)); // сохраняем привязанный
-              setAccountId(Number(data.accountId)); // и ставим как текущий
+              setLinkedAccountId(Number(data.accountId));
+              setAccountId(Number(data.accountId));
             } else {
               console.log("❌ Привязки нет, используется дефолтный.");
-              setAccountId(null); // или можно null, чтобы показать форму поиска
+              setAccountId(null);
             }
           })
           .catch((err) => {
             console.error("Ошибка запроса:", err);
-            setAccountId(null); // fallback
+            setAccountId(null);
           });
       } else {
         console.log("❌ Telegram ID не найден → fallback");

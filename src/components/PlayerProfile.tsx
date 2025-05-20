@@ -48,12 +48,9 @@ export function PlayerProfile({ accountId }: Props) {
     wl.win + wl.lose > 0
       ? ((wl.win / (wl.win + wl.lose)) * 100).toFixed(2)
       : "N/A";
-
   return (
     <div className="w-full bg-gray-800 text-white px-6 py-6 rounded-2xl shadow-lg flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
-      {/* Левая часть: Аватар и инфо */}
       <div className="flex flex-col sm:flex-row items-center gap-6 w-full">
-        {/* Аватар */}
         <div className="relative shrink-0">
           <img
             src={player.profile?.avatarfull}
@@ -61,13 +58,10 @@ export function PlayerProfile({ accountId }: Props) {
             className="w-24 h-24 rounded-full object-cover"
           />
         </div>
-
-        {/* Инфо */}
         <div className="flex flex-col items-center sm:items-start text-center sm:text-left gap-2 w-full">
           <h2 className="text-2xl sm:text-3xl font-bold">
             {player.profile?.personaname}
           </h2>
-
           <div className="flex flex-col sm:flex-row gap-2 sm:gap-8 text-base sm:text-lg mt-1">
             <div>
               <span className="text-gray-400">Победы: </span>
@@ -88,8 +82,6 @@ export function PlayerProfile({ accountId }: Props) {
           </div>
         </div>
       </div>
-
-      {/* Правая часть: Ранг */}
       {player.rank_tier &&
         (() => {
           const rank = Math.floor(player.rank_tier / 10);

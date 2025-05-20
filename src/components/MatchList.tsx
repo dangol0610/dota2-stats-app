@@ -173,7 +173,6 @@ export function MatchList({ accountId }: Props) {
         20 последних матчей
       </h3>
 
-      {/* Заголовки таблицы — только на больших экранах */}
       <div className="hidden sm:grid grid-cols-7 items-center text-gray-400 text-sm px-4 py-2">
         <div className="text-left">Герой</div>
         <div className="text-center">K/D/A</div>
@@ -184,7 +183,6 @@ export function MatchList({ accountId }: Props) {
         <div className="text-center">Предметы</div>
       </div>
 
-      {/* Список матчей */}
       <div className="space-y-3">
         {detailedMatches.map((match) => {
           const hero = getHero(match.hero_id);
@@ -207,7 +205,6 @@ export function MatchList({ accountId }: Props) {
               to={`/match/${match.match_id}`}
               className="block bg-gray-800 text-white px-4 py-3 rounded-xl shadow hover:bg-gray-700 transition flex flex-col sm:grid sm:grid-cols-7 gap-3"
             >
-              {/* Герой */}
               <div className="flex items-center gap-3">
                 <img
                   src={getHeroImageUrl(hero.name)}
@@ -219,7 +216,6 @@ export function MatchList({ accountId }: Props) {
                 </div>
               </div>
 
-              {/* K/D/A */}
               <div className="text-sm text-left sm:text-center">
                 <span className="sm:hidden text-gray-400 mr-1">K/D/A:</span>
                 <span className="text-green-400">{match.kills}</span>/
@@ -227,14 +223,12 @@ export function MatchList({ accountId }: Props) {
                 <span className="text-blue-400">{match.assists}</span>
               </div>
 
-              {/* GPM/XPM */}
               <div className="text-sm text-left sm:text-center">
                 <span className="sm:hidden text-gray-400 mr-1">GPM/XPM:</span>
                 <span className="text-yellow-400">{match.gold_per_min}</span>/
                 <span>{match.xp_per_min}</span>
               </div>
 
-              {/* Длительность */}
               <div className="text-sm text-left sm:text-center">
                 <span className="sm:hidden text-gray-400 mr-1">
                   Длительность:
@@ -242,13 +236,11 @@ export function MatchList({ accountId }: Props) {
                 {formatDuration(match.duration)}
               </div>
 
-              {/* Когда */}
               <div className="text-sm text-left sm:text-center text-gray-400">
                 <span className="sm:hidden text-gray mr-1">Когда:</span>
                 {timeAgo(match.start_time)}
               </div>
 
-              {/* Результат */}
               <div className="text-sm text-left sm:text-center font-bold">
                 <span className="sm:hidden text-gray-400 mr-1">Результат:</span>
                 <span className={isWin ? "text-green-400" : "text-red-400"}>
@@ -256,7 +248,6 @@ export function MatchList({ accountId }: Props) {
                 </span>
               </div>
 
-              {/* Предметы */}
               <div className="flex flex-wrap gap-1 justify-center">
                 {itemsMain.map((id, i) => {
                   const src = getItemImg(id);

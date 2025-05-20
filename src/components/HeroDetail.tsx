@@ -58,7 +58,6 @@ export function HeroDetail({ accountId }: Props) {
     fetcher
   );
 
-  // Загружаем только список матчей (без деталей)
   const { data: matchSummaries } = useSWR<MatchSummary[]>(
     accountId && heroId
       ? `https://api.opendota.com/api/players/${accountId}/matches?hero_id=${heroId}&limit=20`
@@ -73,8 +72,8 @@ export function HeroDetail({ accountId }: Props) {
   useEffect(() => {
     if (!matchSummaries) return;
     if (matchSummaries.length === 0) {
-      setDetailedMatches([]); // На всякий случай обнуляем
-      setLoading(false); // Сразу ставим, что загрузка закончена
+      setDetailedMatches([]);
+      setLoading(false);
       return;
     }
 
@@ -118,7 +117,6 @@ export function HeroDetail({ accountId }: Props) {
           console.error("Ошибка загрузки матча:", error);
         }
 
-        // 🔥 Пауза между запросами чтобы избежать 429
         await new Promise((resolve) => setTimeout(resolve, 100));
       }
 
@@ -168,7 +166,6 @@ export function HeroDetail({ accountId }: Props) {
 
   return (
     <div className="space-y-6 mt-4">
-      {/* Кнопка назад */}
       <button
         onClick={() => navigate(-1)}
         className="px-4 py-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition"
@@ -181,7 +178,6 @@ export function HeroDetail({ accountId }: Props) {
       </h3>
 
       <div className="space-y-1">
-        {/* Заголовки таблицы – только на sm+ */}
         <div className="hidden sm:grid grid-cols-7 items-center text-gray-400 text-sm px-4 py-2">
           <div className="text-left">Герой</div>
           <div className="text-center">K/D/A</div>
@@ -192,7 +188,6 @@ export function HeroDetail({ accountId }: Props) {
           <div className="text-center">Предметы</div>
         </div>
 
-        {/* Список матчей — адаптивно */}
         {detailedMatches.map((match) => {
           const isWin =
             (match.player_slot < 128 && match.radiant_win) ||
@@ -213,7 +208,6 @@ export function HeroDetail({ accountId }: Props) {
               to={`/match/${match.match_id}`}
               className="block bg-gray-800 text-white px-4 py-3 rounded-xl shadow hover:bg-gray-700 transition flex flex-col sm:grid sm:grid-cols-7 gap-3"
             >
-              {/* Герой */}
               <div className="flex items-center gap-3">
                 <img
                   src={getHeroImageUrl(hero.name)}
@@ -225,7 +219,6 @@ export function HeroDetail({ accountId }: Props) {
                 </div>
               </div>
 
-              {/* K/D/A */}
               <div className="text-sm text-left sm:text-center">
                 <span className="sm:hidden text-gray-400 mr-1">K/D/A:</span>
                 <span className="text-green-400">{match.kills}</span>/
@@ -233,14 +226,12 @@ export function HeroDetail({ accountId }: Props) {
                 <span className="text-blue-400">{match.assists}</span>
               </div>
 
-              {/* GPM/XPM */}
               <div className="text-sm text-left sm:text-center">
                 <span className="sm:hidden text-gray-400 mr-1">GPM/XPM:</span>
                 <span className="text-yellow-400">{match.gold_per_min}</span>/
                 <span>{match.xp_per_min}</span>
               </div>
 
-              {/* Длительность */}
               <div className="text-sm text-left sm:text-center">
                 <span className="sm:hidden text-gray-400 mr-1">
                   Длительность:
@@ -248,13 +239,11 @@ export function HeroDetail({ accountId }: Props) {
                 {formatDuration(match.duration)}
               </div>
 
-              {/* Когда */}
               <div className="text-sm text-left sm:text-center text-gray-400">
                 <span className="sm:hidden text-gray mr-1">Когда:</span>
                 {timeAgo(match.start_time)}
               </div>
 
-              {/* Результат */}
               <div className="text-sm text-left sm:text-center font-bold">
                 <span className="sm:hidden text-gray-400 mr-1">Результат:</span>
                 <span className={isWin ? "text-green-400" : "text-red-400"}>
@@ -262,7 +251,6 @@ export function HeroDetail({ accountId }: Props) {
                 </span>
               </div>
 
-              {/* Предметы */}
               <div className="flex flex-wrap gap-1">
                 {itemsMain.map((id, i) => {
                   const src = getItemImg(id);
@@ -290,13 +278,11 @@ export function HeroDetail({ accountId }: Props) {
           </div>
         ) : detailedMatches.length === 0 ? (
           <div className="relative flex flex-col items-center justify-center py-16">
-            {/* Фон — картинка героя */}
             <img
               src={getHeroImageUrl(hero.name)}
               alt={hero.localized_name}
               className="absolute opacity-20 w-48 h-48 object-contain rounded-full"
             />
-            {/* Текст поверх */}
             <div className="relative text-yellow-400 text-xl font-semibold text-center">
               Нет сыгранных матчей на {hero.localized_name}
             </div>
@@ -321,7 +307,6 @@ export function HeroDetail({ accountId }: Props) {
                 key={match.match_id}
                 className="grid grid-cols-7 items-center bg-gray-800 text-white px-4 py-3 rounded-xl shadow gap-3"
               >
-                {/* Колонка 1: Герой */}
                 <div className="flex items-center gap-3 min-w-[140px]">
                   <img
                     src={getHeroImageUrl(hero.name)}
@@ -333,37 +318,31 @@ export function HeroDetail({ accountId }: Props) {
                   </div>
                 </div>
 
-                {/* Колонка 2: KDA */}
                 <div className="text-sm text-left sm:text-center w-full">
                   <span className="text-green-400">{match.kills}</span>/
                   <span className="text-red-400">{match.deaths}</span>/
                   <span className="text-blue-400">{match.assists}</span>
                 </div>
 
-                {/* Колонка 3: GPM/XPM */}
                 <div className="text-sm text-left sm:text-center">
                   <span className="text-yellow-400">{match.gold_per_min}</span>/
                   <span className="text-white-400">{match.xp_per_min}</span>
                 </div>
 
-                {/* Колонка 4: Длительность */}
                 <div className="text-sm text-left sm:text-center">
                   {formatDuration(match.duration)}
                 </div>
 
-                {/* Колонка 5: Время матча */}
                 <div className="text-sm text-left sm:text-center text-gray-400">
                   {timeAgo(match.start_time)}
                 </div>
 
-                {/* Колонка 6: Результат */}
                 <div className="text-sm text-left sm:text-center font-bold">
                   <span className={isWin ? "text-green-400" : "text-red-400"}>
                     {isWin ? "Победа" : "Поражение"}
                   </span>
                 </div>
 
-                {/* Колонка 7: Предметы */}
                 <div className="flex flex-wrap gap-1 justify-center">
                   {itemsMain.map((id, i) => {
                     const src = getItemImg(id);

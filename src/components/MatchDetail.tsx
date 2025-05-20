@@ -78,14 +78,12 @@ export function MatchDetail() {
       : null;
   };
 
-  // ❗️ Проверка данных
   if (!matchData || !heroes || !items) {
     return (
       <div className="text-white text-center p-4">Загрузка данных матча...</div>
     );
   }
 
-  // ❗️ Все вычисления ПОД проверкой
   const matchDuration = `${Math.floor(matchData.duration / 60)}m ${
     matchData.duration % 60
   }s`;
@@ -96,11 +94,11 @@ export function MatchDetail() {
     .filter((p: Player) => p.player_slot < 128)
     .reduce((sum: number, p: Player) => sum + p.kills, 0);
   const matchDate = new Date(matchData.start_time * 1000);
-  const formattedDate = matchDate.toLocaleDateString("ru-RU"); // формат ДД.ММ.ГГГГ
+  const formattedDate = matchDate.toLocaleDateString("ru-RU"); 
   const formattedTime = matchDate.toLocaleTimeString("ru-RU", {
     hour: "2-digit",
     minute: "2-digit",
-  }); // ЧЧ:ММ
+  }); 
 
   const direKills = matchData.players
     .filter((p: Player) => p.player_slot >= 128)
@@ -122,7 +120,6 @@ export function MatchDetail() {
         key={index}
         className="bg-gray-800 text-white px-4 py-3 rounded-xl shadow hover:bg-gray-700 transition flex flex-col sm:grid sm:grid-cols-7 gap-3"
       >
-        {/* Герой */}
         <div className="flex items-center gap-3">
           <img
             src={getHeroImageUrl(hero.name)}
@@ -134,7 +131,6 @@ export function MatchDetail() {
           </div>
         </div>
 
-        {/* K/D/A */}
         <div className="text-sm text-left sm:text-center">
           <span className="sm:hidden text-gray-400 mr-1">K/D/A:</span>
           <span className="text-green-400">{player.kills}</span>/
@@ -142,27 +138,23 @@ export function MatchDetail() {
           <span className="text-blue-400">{player.assists}</span>
         </div>
 
-        {/* GPM/XPM */}
         <div className="text-sm text-left sm:text-center">
           <span className="sm:hidden text-gray-400 mr-1">GPM/XPM:</span>
           <span className="text-yellow-400">{player.gold_per_min}</span>/
           <span>{player.xp_per_min}</span>
         </div>
 
-        {/* Урон */}
         <div className="text-sm text-left sm:text-center">
           <span className="sm:hidden text-gray-400 mr-1">Урон:</span>
           {player.hero_damage}
         </div>
 
-        {/* LH/DN */}
         <div className="text-sm text-left sm:text-center">
           <span className="sm:hidden text-gray-400 mr-1">LH/DN:</span>
           <span className="text-green-400">{player.last_hits}</span>/
           <span className="text-blue-400">{player.denies}</span>
         </div>
 
-        {/* Предметы */}
         <div className="flex flex-wrap gap-1 justify-center">
           {itemsMain.map((id, i) => {
             const src = getItemImg(id);
@@ -193,7 +185,6 @@ export function MatchDetail() {
       >
         ← Назад к матчам
       </button>
-      {/* Информация о матче */}
       <div className="bg-gray-800 rounded-xl shadow p-4 text-center space-y-1">
         <h3 className="text-xl font-semibold text-white">
           Матч #{matchData.match_id}
@@ -213,7 +204,6 @@ export function MatchDetail() {
         </div>
       </div>
 
-      {/* Заголовки таблицы (только на больших экранах) */}
       <div className="hidden sm:grid grid-cols-7 items-center text-gray-400 text-sm px-4 py-2">
         <div className="text-left">Герой</div>
         <div className="text-center">K/D/A</div>
@@ -223,7 +213,6 @@ export function MatchDetail() {
         <div className="text-center">Предметы</div>
       </div>
 
-      {/* Radiant */}
       <h4 className="text-green-400 text-lg font-semibold">Силы Света</h4>
       <div className="space-y-3">
         {matchData.players
@@ -231,7 +220,6 @@ export function MatchDetail() {
           .map(renderPlayerCard)}
       </div>
 
-      {/* Dire */}
       <h4 className="text-red-400 text-lg font-semibold mt-4">Силы Тьмы</h4>
       <div className="space-y-3">
         {matchData.players

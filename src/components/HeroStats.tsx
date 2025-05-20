@@ -88,7 +88,6 @@ export function HeroStats({ accountId }: Props) {
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">Статистика по героям</h2>
 
-        {/* Фильтр */}
         <button
           onClick={() => setOnlyTenPlus((prev) => !prev)}
           className="px-4 py-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition text-sm"
@@ -97,7 +96,6 @@ export function HeroStats({ accountId }: Props) {
         </button>
       </div>
 
-      {/* TABLE-VIEW для десктопов */}
       <div className="hidden sm:block overflow-x-auto">
         <table className="w-full table-auto text-sm">
           <thead>
@@ -162,7 +160,7 @@ export function HeroStats({ accountId }: Props) {
           </tbody>
         </table>
       </div>
-      {/* Мобильная сортировка */}
+
       <div className="block sm:hidden mb-4">
         <label className="block text-sm font-medium mb-1 text-white">
           Сортировка:
@@ -181,7 +179,7 @@ export function HeroStats({ accountId }: Props) {
           <option value="winrate">Винрейт</option>
         </select>
       </div>
-      {/* CARD-VIEW для мобильных */}
+
       <div className="block sm:hidden space-y-3 mt-4">
         {sortedStats.map((hero) => (
           <Link
