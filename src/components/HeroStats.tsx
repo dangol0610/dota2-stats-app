@@ -136,7 +136,7 @@ export function HeroStats({ accountId }: Props) {
             {sortedStats.map((hero) => (
               <tr
                 key={hero.hero_id}
-                className="border-b border-[rgba(255,255,255,0.1)] hover:brightness-105 transition"
+                className="border-b border-[rgba(255, 255, 255, 0.1)] hover:brightness-105 transition"
               >
                 <td className="p-2 flex items-center gap-3">
                   <Link

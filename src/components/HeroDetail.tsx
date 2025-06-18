@@ -1,8 +1,7 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import useSWR from "swr";
 import { fetcher } from "../api/opendota";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 
 interface Props {
   accountId: number;
@@ -66,7 +65,6 @@ export function HeroDetail({ accountId }: Props) {
   );
 
   const [detailedMatches, setDetailedMatches] = useState<MatchDetail[]>([]);
-
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -127,10 +125,11 @@ export function HeroDetail({ accountId }: Props) {
     fetchMatchDetails();
   }, [matchSummaries, accountId]);
 
-  if (!heroes || !items) return <div>Загрузка...</div>;
+  if (!heroes || !items) return <div className="text-tg_text">Загрузка...</div>;
 
   const hero = heroes.find((h) => h.id === Number(heroId));
-  if (!hero) return <div>Нет данных по этому герою.</div>;
+  if (!hero)
+    return <div className="text-tg_text">Нет данных по этому герою.</div>;
 
   const getHeroImageUrl = (name: string) => {
     const shortName = name.replace("npc_dota_hero_", "");
@@ -168,17 +167,17 @@ export function HeroDetail({ accountId }: Props) {
     <div className="space-y-6 mt-4">
       <button
         onClick={() => navigate(-1)}
-        className="px-4 py-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition"
+        className="px-4 py-2 bg-[rgba(255,255,255,0.05)] rounded-lg hover:brightness-105 transition text-tg_text"
       >
         ← Назад к героям
       </button>
 
-      <h3 className="text-2xl font-bold text-white mb-4">
+      <h3 className="text-2xl font-bold text-tg_text mb-4">
         Матчи на {hero.localized_name}
       </h3>
 
       <div className="space-y-1">
-        <div className="hidden sm:grid grid-cols-7 items-center text-gray-400 text-sm px-4 py-2">
+        <div className="hidden sm:grid grid-cols-7 items-center text-tg_hint text-sm px-4 py-2">
           <div className="text-left">Герой</div>
           <div className="text-center">K/D/A</div>
           <div className="text-center">GPM/XPM</div>
@@ -188,92 +187,8 @@ export function HeroDetail({ accountId }: Props) {
           <div className="text-center">Предметы</div>
         </div>
 
-        {detailedMatches.map((match) => {
-          const isWin =
-            (match.player_slot < 128 && match.radiant_win) ||
-            (match.player_slot >= 128 && !match.radiant_win);
-
-          const itemsMain = [
-            match.item_0,
-            match.item_1,
-            match.item_2,
-            match.item_3,
-            match.item_4,
-            match.item_5,
-          ];
-
-          return (
-            <Link
-              key={match.match_id}
-              to={`/match/${match.match_id}`}
-              className="block bg-gray-800 text-white px-4 py-3 rounded-xl shadow hover:bg-gray-700 transition flex flex-col sm:grid sm:grid-cols-7 gap-3"
-            >
-              <div className="flex items-center gap-3">
-                <img
-                  src={getHeroImageUrl(hero.name)}
-                  alt={hero.localized_name}
-                  className="w-10 h-10 rounded"
-                />
-                <div className="text-sm text-left sm:text-center font-medium">
-                  {hero.localized_name}
-                </div>
-              </div>
-
-              <div className="text-sm text-left sm:text-center">
-                <span className="sm:hidden text-gray-400 mr-1">K/D/A:</span>
-                <span className="text-green-400">{match.kills}</span>/
-                <span className="text-red-400">{match.deaths}</span>/
-                <span className="text-blue-400">{match.assists}</span>
-              </div>
-
-              <div className="text-sm text-left sm:text-center">
-                <span className="sm:hidden text-gray-400 mr-1">GPM/XPM:</span>
-                <span className="text-yellow-400">{match.gold_per_min}</span>/
-                <span>{match.xp_per_min}</span>
-              </div>
-
-              <div className="text-sm text-left sm:text-center">
-                <span className="sm:hidden text-gray-400 mr-1">
-                  Длительность:
-                </span>
-                {formatDuration(match.duration)}
-              </div>
-
-              <div className="text-sm text-left sm:text-center text-gray-400">
-                <span className="sm:hidden text-gray mr-1">Когда:</span>
-                {timeAgo(match.start_time)}
-              </div>
-
-              <div className="text-sm text-left sm:text-center font-bold">
-                <span className="sm:hidden text-gray-400 mr-1">Результат:</span>
-                <span className={isWin ? "text-green-400" : "text-red-400"}>
-                  {isWin ? "Победа" : "Поражение"}
-                </span>
-              </div>
-
-              <div className="flex flex-wrap gap-1">
-                {itemsMain.map((id, i) => {
-                  const src = getItemImg(id);
-                  return src ? (
-                    <img
-                      key={i}
-                      src={src}
-                      alt={`item-${id}`}
-                      className="w-7 h-7 rounded border border-gray-700"
-                    />
-                  ) : (
-                    <div
-                      key={i}
-                      className="w-7 h-7 border border-gray-700 bg-gray-700 rounded"
-                    />
-                  );
-                })}
-              </div>
-            </Link>
-          );
-        })}
         {loading ? (
-          <div className="text-gray-400 text-center py-8">
+          <div className="text-tg_hint text-center py-8">
             Загрузка матчей...
           </div>
         ) : detailedMatches.length === 0 ? (
@@ -303,11 +218,12 @@ export function HeroDetail({ accountId }: Props) {
             ];
 
             return (
-              <div
+              <Link
                 key={match.match_id}
-                className="grid grid-cols-7 items-center bg-gray-800 text-white px-4 py-3 rounded-xl shadow gap-3"
+                to={`/match/${match.match_id}`}
+                className="block bg-tg_card text-tg_text px-4 py-3 rounded-xl shadow hover:brightness-105 transition flex flex-col sm:grid sm:grid-cols-7 gap-3"
               >
-                <div className="flex items-center gap-3 min-w-[140px]">
+                <div className="flex items-center gap-3">
                   <img
                     src={getHeroImageUrl(hero.name)}
                     alt={hero.localized_name}
@@ -318,22 +234,26 @@ export function HeroDetail({ accountId }: Props) {
                   </div>
                 </div>
 
-                <div className="text-sm text-left sm:text-center w-full">
+                <div className="text-sm text-left sm:text-center">
+                  <span className="sm:hidden text-tg_hint mr-1">K/D/A:</span>
                   <span className="text-green-400">{match.kills}</span>/
                   <span className="text-red-400">{match.deaths}</span>/
                   <span className="text-blue-400">{match.assists}</span>
                 </div>
 
                 <div className="text-sm text-left sm:text-center">
+                  <span className="sm:hidden text-tg_hint mr-1">GPM/XPM:</span>
                   <span className="text-yellow-400">{match.gold_per_min}</span>/
-                  <span className="text-white-400">{match.xp_per_min}</span>
+                  <span>{match.xp_per_min}</span>
                 </div>
 
                 <div className="text-sm text-left sm:text-center">
+                  <span className="sm:hidden text-tg_hint mr-1">Длительность:</span>
                   {formatDuration(match.duration)}
                 </div>
 
-                <div className="text-sm text-left sm:text-center text-gray-400">
+                <div className="text-sm text-left sm:text-center text-tg_hint">
+                  <span className="sm:hidden mr-1">Когда:</span>
                   {timeAgo(match.start_time)}
                 </div>
 
@@ -351,17 +271,17 @@ export function HeroDetail({ accountId }: Props) {
                         key={i}
                         src={src}
                         alt={`item-${id}`}
-                        className="w-7 h-7 rounded border border-gray-700"
+                        className="w-7 h-7 rounded border border-[rgba(255,255,255,0.1)]"
                       />
                     ) : (
                       <div
                         key={i}
-                        className="w-7 h-7 border border-gray-700 bg-gray-700 rounded"
+                        className="w-7 h-7 border border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.05)] rounded"
                       />
                     );
                   })}
                 </div>
-              </div>
+              </Link>
             );
           })
         )}
