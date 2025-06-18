@@ -129,6 +129,13 @@ function AppContent() {
       tg.ready();
       tg.expand();
 
+      const theme = tg.themeParams;
+      console.log("🎨 Тема Telegram:", theme);
+      const root = document.documentElement;
+      if (theme?.bg_color) root.style.setProperty('--tg-bg-color', theme.bg_color);
+      if (theme?.text_color) root.style.setProperty('--tg-text-color', theme.text_color);
+      if (theme?.hint_color) root.style.setProperty('--tg-hint-color', theme.hint_color);
+
       const telegramId = tg.initDataUnsafe?.user?.id;
       console.log("🟢 telegramId на фронтенде:", telegramId);
       if (telegramId) {
@@ -177,7 +184,7 @@ function AppContent() {
         }
         onReturn={() => setAccountId(linkedAccountId)}
       />
-      <div className="w-full mx-auto p-4 text-white">
+      <div className="w-full mx-auto p-4 text-tg_text">
         {accountId !== null && (
           <>
             <PlayerProfile accountId={accountId} />
@@ -209,7 +216,7 @@ function AppContent() {
 export default function App() {
   return (
     <Router>
-      <div className="bg-gray-900 min-h-screen">
+      <div className="bg-tg_bg min-h-screen">
         <AppContent />
       </div>
     </Router>
