@@ -18,7 +18,7 @@ export function PlayerProfile({ accountId }: Props) {
 
   if (playerError || wlError)
     return <div className="text-red-500">Ошибка загрузки профиля</div>;
-  if (!player || !wl) return <div>Загрузка профиля...</div>;
+  if (!player || !wl) return <div className="text-tg_text">Загрузка профиля...</div>;
 
   const getRankName = (rank_tier: number) => {
     const rank = Math.floor(rank_tier / 10);
@@ -48,8 +48,9 @@ export function PlayerProfile({ accountId }: Props) {
     wl.win + wl.lose > 0
       ? ((wl.win / (wl.win + wl.lose)) * 100).toFixed(2)
       : "N/A";
+
   return (
-    <div className="w-full bg-gray-800 text-white px-6 py-6 rounded-2xl shadow-lg flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+    <div className="w-full bg-tg_bg text-tg_text px-6 py-6 rounded-2xl shadow-lg flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
       <div className="flex flex-col sm:flex-row items-center gap-6 w-full">
         <div className="relative shrink-0">
           <img
@@ -64,19 +65,19 @@ export function PlayerProfile({ accountId }: Props) {
           </h2>
           <div className="flex flex-col sm:flex-row gap-2 sm:gap-8 text-base sm:text-lg mt-1">
             <div>
-              <span className="text-gray-400">Победы: </span>
+              <span className="text-tg_hint">Победы: </span>
               <span className="text-green-400 font-semibold">
                 {wl.win ?? "-"}
               </span>
             </div>
             <div>
-              <span className="text-gray-400">Поражения: </span>
+              <span className="text-tg_hint">Поражения: </span>
               <span className="text-red-400 font-semibold">
                 {wl.lose ?? "-"}
               </span>
             </div>
             <div>
-              <span className="text-gray-400">Доля побед: </span>
+              <span className="text-tg_hint">Доля побед: </span>
               <span className="font-semibold">{winrate}%</span>
             </div>
           </div>
