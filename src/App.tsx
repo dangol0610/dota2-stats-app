@@ -34,7 +34,7 @@ function Header({
   };
 
   return (
-    <div className="bg-gray-900 py-4 px-4 sm:px-8 shadow w-full">
+    <div className="bg-tg_bg py-4 px-4 sm:px-8 shadow w-full">
       <div className="max-w-screen-xl mx-auto w-full flex flex-col gap-4">
         <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4">
           {showReturnButton && onReturn && (
@@ -64,7 +64,7 @@ function Header({
             className={({ isActive }) =>
               isActive
                 ? "text-yellow-400 font-semibold"
-                : "text-gray-400 hover:text-white transition"
+                : "text-tg_hint hover:text-tg_text transition"
             }
           >
             Матчи
@@ -74,7 +74,7 @@ function Header({
             className={({ isActive }) =>
               isActive
                 ? "text-yellow-300 font-semibold"
-                : "text-gray-300 hover:text-white transition"
+                : "text-tg_hint hover:text-tg_text transition"
             }
           >
             Герои
@@ -83,11 +83,11 @@ function Header({
 
         <form
           onSubmit={handleSubmit}
-          className="flex w-full sm:w-auto items-center bg-gray-700 rounded-md overflow-hidden"
+          className="flex w-full sm:w-auto items-center bg-[rgba(255,255,255,0.05)] rounded-md overflow-hidden"
         >
           <button
             type="submit"
-            className="pl-3 pr-2 text-gray-400 hover:text-white focus:outline-none"
+            className="pl-3 pr-2 text-tg_hint hover:text-tg_text focus:outline-none"
             title="Поиск"
           >
             <svg
@@ -110,7 +110,7 @@ function Header({
             placeholder="Поиск по ID..."
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
-            className="bg-gray-700 text-white px-3 py-2 text-sm w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+            className="bg-transparent text-tg_text placeholder-tg_hint px-3 py-2 text-sm w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-yellow-400"
           />
         </form>
       </div>
