@@ -84,13 +84,13 @@ export function HeroStats({ accountId }: Props) {
   };
 
   return (
-    <div className="w-full bg-gray-800 text-white p-6 rounded-2xl shadow-lg">
+    <div className="w-full bg-tg_card text-tg_text p-6 rounded-2xl shadow-lg">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">Статистика по героям</h2>
 
         <button
           onClick={() => setOnlyTenPlus((prev) => !prev)}
-          className="px-4 py-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition text-sm"
+          className="px-4 py-2 bg-[rgba(255,255,255,0.05)] rounded-lg hover:brightness-110 transition text-sm"
         >
           {onlyTenPlus ? "Показать всех" : "Только 10+ игр"}
         </button>
@@ -99,7 +99,7 @@ export function HeroStats({ accountId }: Props) {
       <div className="hidden sm:block overflow-x-auto">
         <table className="w-full table-auto text-sm">
           <thead>
-            <tr className="text-left bg-gray-700">
+            <tr className="text-left bg-[rgba(255,255,255,0.05)]">
               <th className="p-2">Герой</th>
               <th
                 className="p-2 cursor-pointer"
@@ -136,7 +136,7 @@ export function HeroStats({ accountId }: Props) {
             {sortedStats.map((hero) => (
               <tr
                 key={hero.hero_id}
-                className="border-b border-gray-700 hover:bg-gray-700"
+                className="border-b border-[rgba(255,255,255,0.1)] hover:brightness-105 transition"
               >
                 <td className="p-2 flex items-center gap-3">
                   <Link
@@ -162,7 +162,7 @@ export function HeroStats({ accountId }: Props) {
       </div>
 
       <div className="block sm:hidden mb-4">
-        <label className="block text-sm font-medium mb-1 text-white">
+        <label className="block text-sm font-medium mb-1 text-tg_text">
           Сортировка:
         </label>
         <select
@@ -171,7 +171,7 @@ export function HeroStats({ accountId }: Props) {
             const key = e.target.value as "games" | "winrate" | "win" | "lose";
             toggleSort(key);
           }}
-          className="bg-gray-700 text-white p-2 rounded w-full"
+          className="bg-[rgba(255,255,255,0.05)] text-tg_text p-2 rounded w-full"
         >
           <option value="games">Игры</option>
           <option value="win">Победы</option>
@@ -184,7 +184,7 @@ export function HeroStats({ accountId }: Props) {
         {sortedStats.map((hero) => (
           <Link
             key={hero.hero_id}
-            className="bg-gray-700 rounded-xl p-4 shadow flex flex-col gap-2 hover:bg-gray-600"
+            className="bg-[rgba(255,255,255,0.05)] rounded-xl p-4 shadow flex flex-col gap-2 hover:brightness-105 transition"
             to={`/hero/${hero.hero_id}`}
           >
             <div className="flex items-center gap-4">
@@ -193,23 +193,22 @@ export function HeroStats({ accountId }: Props) {
                 alt={hero.name}
                 className="w-10 h-10 rounded-md"
               />
-
               {hero.name}
             </div>
             <div className="text-sm">
-              <span className="text-gray-400">Игры: </span>
+              <span className="text-tg_hint">Игры: </span>
               <span>{hero.games}</span>
             </div>
             <div className="text-sm text-green-400">
-              <span className="text-gray-400 text-white">Победы: </span>
+              <span className="text-tg_hint">Победы: </span>
               <span>{hero.win}</span>
             </div>
             <div className="text-sm text-red-400">
-              <span className="text-gray-400 text-white">Поражения: </span>
+              <span className="text-tg_hint">Поражения: </span>
               <span>{hero.lose}</span>
             </div>
             <div className="text-sm">
-              <span className="text-gray-400">Винрейт: </span>
+              <span className="text-tg_hint">Винрейт: </span>
               <span>{hero.winrate.toFixed(2)}%</span>
             </div>
           </Link>
