@@ -144,7 +144,7 @@ function AppContent() {
           theme.bg_color.startsWith("#0") || theme.bg_color.startsWith("#1");
         root.style.setProperty(
           "--tg-card-bg",
-          isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)"
+          isDark ? "rgba(220, 220, 220, 0.4)" : "rgba(0, 0, 0, 0.4)"
         );
       }
 

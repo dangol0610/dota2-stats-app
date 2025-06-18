@@ -169,11 +169,11 @@ export function MatchList({ accountId }: Props) {
 
   return (
     <div className="space-y-2 mt-4">
-      <h3 className="text-xl font-semibold text-white mb-2">
+      <h3 className="text-xl font-semibold text-tg_text mb-2">
         20 последних матчей
       </h3>
 
-      <div className="hidden sm:grid grid-cols-7 items-center text-gray-400 text-sm px-4 py-2">
+      <div className="hidden sm:grid grid-cols-7 items-center text-tg_hint text-sm px-4 py-2">
         <div className="text-left">Герой</div>
         <div className="text-center">K/D/A</div>
         <div className="text-center">GPM/XPM</div>
@@ -203,7 +203,7 @@ export function MatchList({ accountId }: Props) {
             <Link
               key={match.match_id}
               to={`/match/${match.match_id}`}
-              className="block bg-gray-800 text-white px-4 py-3 rounded-xl shadow hover:bg-gray-700 transition flex flex-col sm:grid sm:grid-cols-7 gap-3"
+              className="block bg-tg_card text-tg_text px-4 py-3 rounded-xl shadow hover:brightness-105 transition flex flex-col sm:grid sm:grid-cols-7 gap-3"
             >
               <div className="flex items-center gap-3">
                 <img
@@ -217,32 +217,32 @@ export function MatchList({ accountId }: Props) {
               </div>
 
               <div className="text-sm text-left sm:text-center">
-                <span className="sm:hidden text-gray-400 mr-1">K/D/A:</span>
+                <span className="sm:hidden text-tg_hint mr-1">K/D/A:</span>
                 <span className="text-green-400">{match.kills}</span>/
                 <span className="text-red-400">{match.deaths}</span>/
                 <span className="text-blue-400">{match.assists}</span>
               </div>
 
               <div className="text-sm text-left sm:text-center">
-                <span className="sm:hidden text-gray-400 mr-1">GPM/XPM:</span>
+                <span className="sm:hidden text-tg_hint mr-1">GPM/XPM:</span>
                 <span className="text-yellow-400">{match.gold_per_min}</span>/
                 <span>{match.xp_per_min}</span>
               </div>
 
               <div className="text-sm text-left sm:text-center">
-                <span className="sm:hidden text-gray-400 mr-1">
+                <span className="sm:hidden text-tg_hint mr-1">
                   Длительность:
                 </span>
                 {formatDuration(match.duration)}
               </div>
 
-              <div className="text-sm text-left sm:text-center text-gray-400">
-                <span className="sm:hidden text-gray mr-1">Когда:</span>
+              <div className="text-sm text-left sm:text-center text-tg_hint">
+                <span className="sm:hidden mr-1">Когда:</span>
                 {timeAgo(match.start_time)}
               </div>
 
               <div className="text-sm text-left sm:text-center font-bold">
-                <span className="sm:hidden text-gray-400 mr-1">Результат:</span>
+                <span className="sm:hidden text-tg_hint mr-1">Результат:</span>
                 <span className={isWin ? "text-green-400" : "text-red-400"}>
                   {isWin ? "Победа" : "Поражение"}
                 </span>
@@ -256,12 +256,12 @@ export function MatchList({ accountId }: Props) {
                       key={i}
                       src={src}
                       alt={`item-${id}`}
-                      className="w-7 h-7 rounded border border-gray-700"
+                      className="w-7 h-7 rounded border border-[rgba(255,255,255,0.2)]"
                     />
                   ) : (
                     <div
                       key={i}
-                      className="w-7 h-7 border border-gray-700 bg-gray-700 rounded"
+                      className="w-7 h-7 border border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.05)] rounded"
                     />
                   );
                 })}
