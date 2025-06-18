@@ -132,9 +132,21 @@ function AppContent() {
       const theme = tg.themeParams;
       console.log("🎨 Тема Telegram:", theme);
       const root = document.documentElement;
-      if (theme?.bg_color) root.style.setProperty('--tg-bg-color', theme.bg_color);
-      if (theme?.text_color) root.style.setProperty('--tg-text-color', theme.text_color);
-      if (theme?.hint_color) root.style.setProperty('--tg-hint-color', theme.hint_color);
+      if (theme?.bg_color)
+        root.style.setProperty("--tg-bg-color", theme.bg_color);
+      if (theme?.text_color)
+        root.style.setProperty("--tg-text-color", theme.text_color);
+      if (theme?.hint_color)
+        root.style.setProperty("--tg-hint-color", theme.hint_color);
+      if (theme?.bg_color) {
+        root.style.setProperty("--tg-bg-color", theme.bg_color);
+        const isDark =
+          theme.bg_color.startsWith("#0") || theme.bg_color.startsWith("#1");
+        root.style.setProperty(
+          "--tg-card-bg",
+          isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)"
+        );
+      }
 
       const telegramId = tg.initDataUnsafe?.user?.id;
       console.log("🟢 telegramId на фронтенде:", telegramId);

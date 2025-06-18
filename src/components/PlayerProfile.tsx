@@ -50,7 +50,7 @@ export function PlayerProfile({ accountId }: Props) {
       : "N/A";
 
   return (
-    <div className="w-full bg-tg_bg text-tg_text px-6 py-6 rounded-2xl shadow-lg flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+    <div className="w-full bg-tg_card text-tg_text px-6 py-6 rounded-2xl shadow-lg flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
       <div className="flex flex-col sm:flex-row items-center gap-6 w-full">
         <div className="relative shrink-0">
           <img

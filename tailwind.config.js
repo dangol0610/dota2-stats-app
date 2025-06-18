@@ -7,6 +7,7 @@ module.exports = {
       tg_bg: 'var(--tg-bg-color)',
       tg_text: 'var(--tg-text-color)',
       tg_hint: 'var(--tg-hint-color)',
+      tg_card: 'var(--tg-card-bg)', 
     },
   },
 },
