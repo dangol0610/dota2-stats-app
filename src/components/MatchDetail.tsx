@@ -1,8 +1,7 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 import { fetcher } from "../api/opendota";
-import { useNavigate } from "react-router-dom";
 
 interface Player {
   account_id: number;
@@ -80,7 +79,7 @@ export function MatchDetail() {
 
   if (!matchData || !heroes || !items) {
     return (
-      <div className="text-white text-center p-4">Загрузка данных матча...</div>
+      <div className="text-tg_text text-center p-4">Загрузка данных матча...</div>
     );
   }
 
@@ -93,16 +92,16 @@ export function MatchDetail() {
   const radiantKills = matchData.players
     .filter((p: Player) => p.player_slot < 128)
     .reduce((sum: number, p: Player) => sum + p.kills, 0);
-  const matchDate = new Date(matchData.start_time * 1000);
-  const formattedDate = matchDate.toLocaleDateString("ru-RU"); 
-  const formattedTime = matchDate.toLocaleTimeString("ru-RU", {
-    hour: "2-digit",
-    minute: "2-digit",
-  }); 
-
   const direKills = matchData.players
     .filter((p: Player) => p.player_slot >= 128)
     .reduce((sum: number, p: Player) => sum + p.kills, 0);
+
+  const matchDate = new Date(matchData.start_time * 1000);
+  const formattedDate = matchDate.toLocaleDateString("ru-RU");
+  const formattedTime = matchDate.toLocaleTimeString("ru-RU", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 
   const renderPlayerCard = (player: Player, index: number) => {
     const hero = getHero(player.hero_id);
@@ -118,7 +117,7 @@ export function MatchDetail() {
     return (
       <div
         key={index}
-        className="bg-gray-800 text-white px-4 py-3 rounded-xl shadow hover:bg-gray-700 transition flex flex-col sm:grid sm:grid-cols-7 gap-3"
+        className="bg-tg_card text-tg_text px-4 py-3 rounded-xl shadow hover:brightness-105 transition flex flex-col sm:grid sm:grid-cols-7 gap-3"
       >
         <div className="flex items-center gap-3">
           <img
@@ -126,31 +125,29 @@ export function MatchDetail() {
             alt={hero.localized_name}
             className="w-10 h-10 rounded"
           />
-          <div className="text-sm text-left sm:text-center font-medium">
-            {hero.localized_name}
-          </div>
+          <div className="text-sm font-medium">{hero.localized_name}</div>
         </div>
 
         <div className="text-sm text-left sm:text-center">
-          <span className="sm:hidden text-gray-400 mr-1">K/D/A:</span>
+          <span className="sm:hidden text-tg_hint mr-1">K/D/A:</span>
           <span className="text-green-400">{player.kills}</span>/
           <span className="text-red-400">{player.deaths}</span>/
           <span className="text-blue-400">{player.assists}</span>
         </div>
 
         <div className="text-sm text-left sm:text-center">
-          <span className="sm:hidden text-gray-400 mr-1">GPM/XPM:</span>
+          <span className="sm:hidden text-tg_hint mr-1">GPM/XPM:</span>
           <span className="text-yellow-400">{player.gold_per_min}</span>/
           <span>{player.xp_per_min}</span>
         </div>
 
         <div className="text-sm text-left sm:text-center">
-          <span className="sm:hidden text-gray-400 mr-1">Урон:</span>
+          <span className="sm:hidden text-tg_hint mr-1">Урон:</span>
           {player.hero_damage}
         </div>
 
         <div className="text-sm text-left sm:text-center">
-          <span className="sm:hidden text-gray-400 mr-1">LH/DN:</span>
+          <span className="sm:hidden text-tg_hint mr-1">LH/DN:</span>
           <span className="text-green-400">{player.last_hits}</span>/
           <span className="text-blue-400">{player.denies}</span>
         </div>
@@ -163,12 +160,12 @@ export function MatchDetail() {
                 key={i}
                 src={src}
                 alt={`item-${id}`}
-                className="w-7 h-7 rounded border border-gray-700"
+                className="w-7 h-7 rounded border border-[rgba(255,255,255,0.1)]"
               />
             ) : (
               <div
                 key={i}
-                className="w-7 h-7 border border-gray-700 bg-gray-700 rounded"
+                className="w-7 h-7 border border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.05)] rounded"
               />
             );
           })}
@@ -178,33 +175,30 @@ export function MatchDetail() {
   };
 
   return (
-    <div className="space-y-2 mt-4">
+    <div className="space-y-4 mt-4">
       <button
         onClick={() => navigate(-1)}
-        className="px-4 py-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition"
+        className="px-4 py-2 bg-[rgba(255,255,255,0.05)] rounded-lg hover:brightness-105 transition text-tg_text"
       >
         ← Назад к матчам
       </button>
-      <div className="bg-gray-800 rounded-xl shadow p-4 text-center space-y-1">
-        <h3 className="text-xl font-semibold text-white">
-          Матч #{matchData.match_id}
-        </h3>
-        <div className="text-gray-400 text-sm">
-          Длительность: {matchDuration}
-        </div>
-        <div className="text-gray-400 text-sm">
+
+      <div className="bg-tg_card rounded-xl shadow p-4 text-center space-y-1 text-tg_text">
+        <h3 className="text-xl font-semibold">Матч #{matchData.match_id}</h3>
+        <div className="text-sm text-tg_hint">Длительность: {matchDuration}</div>
+        <div className="text-sm text-tg_hint">
           Дата: {formattedDate} {formattedTime}
         </div>
         <div className={`font-semibold ${winnerColor}`}>
           Победитель: {winnerText}
         </div>
-        <div className="text-gray-300 text-lg font-semibold">
+        <div className="text-lg font-semibold">
           <span className="text-green-400">{radiantKills}</span> :{" "}
           <span className="text-red-400">{direKills}</span>
         </div>
       </div>
 
-      <div className="hidden sm:grid grid-cols-7 items-center text-gray-400 text-sm px-4 py-2">
+      <div className="hidden sm:grid grid-cols-7 items-center text-tg_hint text-sm px-4 py-2">
         <div className="text-left">Герой</div>
         <div className="text-center">K/D/A</div>
         <div className="text-center">GPM/XPM</div>
